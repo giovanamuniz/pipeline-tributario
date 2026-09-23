@@ -1,12 +1,27 @@
-data/
-!data/**/.gitkeep
-.env
+# Python
 .venv/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
-.Rproj.user/
-.Rhistory
-*.csv
-*.parquet
-*.zip
+
+# OpenTofu: estado local e variáveis locais nunca vão para o Git
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+
+# Imagens de VM (pesadas e baixáveis)
+*.img
+*.qcow2
+*.iso
+
+# Chaves e segredos
+.env
+*.pem
+id_rsa*
+id_ed25519*
+
+# Dados gerados: só o exemplo é versionado
+dados/*
+!dados/exemplo_dados.csv
