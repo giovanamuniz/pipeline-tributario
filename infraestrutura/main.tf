@@ -80,3 +80,19 @@ output "comando_ssh" {
   description = "Comando para acessar a VM"
   value       = "ssh -i ~/.ssh/vm_pipeline ${var.usuario}@${libvirt_domain.vm.network_interface[0].addresses[0]}"
 }
+
+# Inventário do Ansible gerado a partir do IP real da VM
+resource "local_file" "inventario_ansible" {
+  filename        = "${path.module}/ansible/inventory.ini"
+  file_permission = "0644"
+  content         = <<-EOT
+    [simulador]
+    ${var.nome_vm} ansible_host=${libvirt_domain.vm.network_interface[0].addresses[0]}
+
+    [simulador:vars]
+    ansible_user=${var.usuario}
+    ansible_ssh_private_key_file=${trimsuffix(var.ssh_public_key_path, ".pub")}
+    ansible_python_interpreter=/usr/bin/python3
+    ansible_ssh_common_args='-o StrictHostKeyChecking=accept-new'
+  EOT
+}
